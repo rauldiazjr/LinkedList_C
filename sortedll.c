@@ -15,8 +15,6 @@
 #include    <string.h>
 #include    <ctype.h>
 #include    "sortedll.h"
-
-
 // ==== main ==================================================================
 //
 // ============================================================================
@@ -37,8 +35,7 @@ int     main(void)
         switch (*buf)
             {
             case   'A':
-                // prompt the user for a value; if we get one, add it to the
-                // list
+                // prompt the user for a value; if we get one, add it to the list
                 printf("Please enter an integer value to add: ");
                 fgets(buf, BUFLEN, stdin);
                 if (1 != sscanf(buf, "%d", &intVal))
@@ -126,9 +123,9 @@ int     main(void)
 
 LNode*  AddItem(LNode  *headPtr, int  newItem)
 {
-    auto	LNode	 *Ptr; 
-    auto	LNode 	*leadPtr; 
-    auto	LNode 	*trailPtr; 
+    auto    LNode     *Ptr; 
+    auto    LNode     *leadPtr; 
+    auto    LNode     *trailPtr; 
          
     Ptr = malloc(sizeof(LNode)); 
     Ptr->value = newItem; 
@@ -137,48 +134,46 @@ LNode*  AddItem(LNode  *headPtr, int  newItem)
     //if empty list  
     if( headPtr == NULL || (Ptr->value <=  headPtr->value))
     {
-   		Ptr->next = headPtr; 
-      	headPtr = Ptr; 
-       	return headPtr; 
+           Ptr->next = headPtr; 
+           headPtr = Ptr; 
+           return headPtr; 
        
     }
    
- 	
+     
     leadPtr = headPtr->next; 
     trailPtr = headPtr; 
-      	 
+           
      
     //checks for middle insertion using lead and trail pointers
     while(leadPtr != NULL)
     {
     
-    	if(Ptr->value <=  leadPtr->value)
-    	{
-    		Ptr->next = leadPtr; 
-    		trailPtr->next = Ptr;
-    		return headPtr; 
-    	}
-    	
-    	trailPtr = leadPtr; 
-    	leadPtr = leadPtr->next; 
-    	
+        if(Ptr->value <=  leadPtr->value)
+        {
+            Ptr->next = leadPtr; 
+            trailPtr->next = Ptr;
+            return headPtr; 
+        }
+        
+        trailPtr = leadPtr; 
+        leadPtr = leadPtr->next; 
+        
     
     }
     
     //end of list insertion;... may not work, where does leadPtr->next point too if leadPtr == NULL?
-    //							but value belongs at the end of the list???
+    //                            but value belongs at the end of the list???
     if(leadPtr == NULL)
     {
-    	trailPtr->next = Ptr; 
-    	Ptr->next = NULL;  
-    	return headPtr; 
+        trailPtr->next = Ptr; 
+        Ptr->next = NULL;  
+        return headPtr; 
     }
       
     //return headPtr; 
          
 }  // end of "AddItem"
-
-
 
 // ==== DisplayList ===========================================================
 //
@@ -193,7 +188,7 @@ LNode*  AddItem(LNode  *headPtr, int  newItem)
 //
 // ============================================================================
 
-int     DisplayList(LNode  *nodePtr)
+int DisplayList(LNode  *nodePtr)
 {
     auto    int         counter = 0;
 
@@ -203,14 +198,14 @@ int     DisplayList(LNode  *nodePtr)
         puts("The list is currently empty...");
         return (0);
         }
-	puts("****************************");
+    puts("****************************");
     while (NULL != nodePtr)
         {
         printf("%d\n", nodePtr->value);
         nodePtr = nodePtr->next;
         counter++;
         }
-	puts("****************************");
+    puts("****************************");
     return (counter);
 
 }  // end of "DisplayList"
@@ -255,34 +250,34 @@ void    DisplayMenu(void)
 
 int     ReleaseMemory(LNode  *headPtr)
 {
-	if(headPtr == NULL)
-	{
-		free(headPtr); 
-		return 0; 
-	}
+    if(headPtr == NULL)
+    {
+        free(headPtr); 
+        return 0; 
+    }
 
-    auto	LNode 	*leadPtr; 
-    auto	LNode 	*trailPtr; 
-	auto	int		count=0; 
-	
-	leadPtr = headPtr-> next; 
-	trailPtr = headPtr; 
-	
-	do
-	{
-		++count;
-		free(trailPtr); 
-		trailPtr = leadPtr; 
-		
-		//Prevents seg-fault if list has only one element.
-		if(trailPtr!=NULL)
-		{
-			leadPtr = leadPtr->next; 
-		}
-		
-	}while(trailPtr != NULL); 
-	
-	
+    auto    LNode     *leadPtr; 
+    auto    LNode     *trailPtr; 
+    auto    int        count=0; 
+    
+    leadPtr = headPtr-> next; 
+    trailPtr = headPtr; 
+    
+    do
+    {
+        ++count;
+        free(trailPtr); 
+        trailPtr = leadPtr; 
+        
+        //Prevents seg-fault if list has only one element.
+        if(trailPtr!=NULL)
+        {
+            leadPtr = leadPtr->next; 
+        }
+        
+    }while(trailPtr != NULL); 
+    
+    
     return count; 
 
 }  // end of "ReleaseMemory"
@@ -306,45 +301,45 @@ int     ReleaseMemory(LNode  *headPtr)
 
 LNode*  RemoveItem(LNode  *headPtr, int  targetItem)
 {
-	//front of list
-	if(targetItem == headPtr->value)
-	{
-		headPtr = headPtr->next; 
-		return headPtr; 
-	
-	}
+    //front of list
+    if(targetItem == headPtr->value)
+    {
+        headPtr = headPtr->next; 
+        return headPtr; 
+    
+    }
 
-    auto	LNode 	*leadPtr; 
-    auto	LNode 	*trailPtr; 
+    auto    LNode     *leadPtr; 
+    auto    LNode     *trailPtr; 
 
-	leadPtr = headPtr->next; 
-	trailPtr = headPtr; 
-	
-	//checks list for targetItem
-	do
-	{
-		if( targetItem == leadPtr->value )
-		{
-			trailPtr->next = leadPtr->next; 
-			free(leadPtr); 
-			return headPtr; 
-		
-		}
-	
-		trailPtr = leadPtr; 
-		leadPtr = leadPtr->next; 
-	
-	
-	}while(leadPtr != NULL); 
-	
-	//target was not found
-	if(leadPtr == NULL)
-	{
-		puts("Remove a value: Target was not found"); 
-		trailPtr->next = NULL; 
-		return headPtr; 
-	
-	}
+    leadPtr = headPtr->next; 
+    trailPtr = headPtr; 
+    
+    //checks list for targetItem
+    do
+    {
+        if( targetItem == leadPtr->value )
+        {
+            trailPtr->next = leadPtr->next; 
+            free(leadPtr); 
+            return headPtr; 
+        
+        }
+    
+        trailPtr = leadPtr; 
+        leadPtr = leadPtr->next; 
+    
+    
+    }while(leadPtr != NULL); 
+    
+    //target was not found
+    if(leadPtr == NULL)
+    {
+        puts("Remove a value: Target was not found"); 
+        trailPtr->next = NULL; 
+        return headPtr; 
+    
+    }
     
    // return headPtr; 
 
